@@ -1,5 +1,12 @@
+import random
+
+def deal(numhands, n=5, deck=[r+s for r in '23456789TJQKA' for s in 'SDHC']):
+    "Shuffle the deck and deal out numhands n-card hands."
+    random.shuffle(deck)
+    return [deck[n*i:n*(i+1)] for i in range(numhands)]
+
 def poker(hands):
-    "Return the best hand: poker([hand,...]) => hand"
+    "Return the best hand: poker([hand,...]) => [hand,...]"
     return allmax(hands, key=hand_rank)
 
 def allmax(iterable, key=None):
@@ -8,6 +15,11 @@ def allmax(iterable, key=None):
     key = key or (lamda x: x)
     for x in iterable:
         xval = key(x)
+        if not result or xval > maxval:
+            result, maxval = [x], xval
+        elif xval == maxval:
+            result.append(x)
+    return result
 
 def hand_rank(hand):
     "Return value indicating rank of a hand."
